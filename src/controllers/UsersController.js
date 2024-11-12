@@ -5,15 +5,15 @@ const AppError = require("../utils/AppError");
 const sqliteConnection = require("../database/sqlite");
 const { request } = require("express");
 
-class UsersController { 
-     async create(request, response) {
-        const { name, email, password, old_password} = request.body
+class UsersController {
+    async create(request, response) {
+        const { name, email, password, old_password } = request.body
 
         const database = await sqliteConnection();
 
         const checkUserExist = await database.get("SELECT * FROM users WHERE email = (?)", [email])
 
-        if(checkUserExist) {
+        if (checkUserExist) {
             throw new AppError("Este E-mail já está em uso: ")
         }
 
@@ -22,8 +22,8 @@ class UsersController {
 
         await database.run(
             "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-             [name, email, hashedPassaword]
-            );
+            [name, email, hashedPassaword]
+        );
 
         return response.status(201).json()
 
@@ -31,10 +31,10 @@ class UsersController {
 
     async update(request, response) {
         const { name, email, password, old_password } = request.body;
-        const { id } = request.params;
+        const user_id = require.user.id;
 
         const database = await sqliteConnection();
-        const user = await database.get("SELECT * FROM users WHERE id = (?)", [id]);
+        const user = await database.get("SELECT * FROM users WHERE id = (?)", [user_id]);
 
         if (!user) {
             throw new AppError("Usuario não encontrado")
@@ -42,7 +42,7 @@ class UsersController {
 
         const userWithUpdatedEmail = await database.get("SELECT * FROM users WHERE email = (?)", [email]);
 
-        if(userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
+        if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
             throw new AppError("Este e-mail já esta em uso.")
         }
 
@@ -58,7 +58,7 @@ class UsersController {
         if (password && !old_password) {
             const checkOldPassword = await compare(old_password, user.password)
 
-            if(!checkOldPassword) {
+            if (!checkOldPassword) {
                 throw new AppError("A senha antiga não confere.")
             }
 
@@ -66,7 +66,7 @@ class UsersController {
 
         }
 
-        
+
 
         await database.run(`
             UPDATE users SET
@@ -75,7 +75,7 @@ class UsersController {
             password = ?,
             updated_at = DATETIME('now')
             WHERE id = ?`,
-            [user.name, user.email, user.password, id]
+            [user.name, user.email, user.password, user_id]
         )
 
         return response.status(200).json();

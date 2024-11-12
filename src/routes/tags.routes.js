@@ -1,13 +1,13 @@
-const { Router } = require('express')
+const { Router } = require("express");
 
-const TagsController = require("../controllers/TagsController")
+const TagsController = require("../controllers/TagsController");
 
-const tagsRoutes = Router()
+const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
+
+const tagsRoutes = Router();
 
 const tagsController = new TagsController();
 
+tagsRoutes.get("/", ensureAuthenticated, tagsController.index);
 
-tagsRoutes.get('/:user_id', tagsController.index);
-
-
-module.exports = tagsRoutes
+module.exports = tagsRoutes;
