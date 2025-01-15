@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 const { verify } = require('jsonwebtoken');
 const AppError = require('../utils/AppError');
 const authConfig = require('../configs/auth');
+=======
+const { verify } = require("jsonwebtoken");
+const AppError = require("../utils/AppError");
+const authConfig = require("../configs/auth");
+
+
+>>>>>>> 034614910870b671bed44fcfc5e68348ebeeeb56
 
 function ensureAuthenticated(request, response, next) {
   const authHeader = request.headers.authorization;
