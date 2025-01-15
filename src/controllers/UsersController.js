@@ -30,7 +30,7 @@ class UsersController {
 
     const database = await sqliteConnection();
     const user = await database.get("SELECT * FROM users WHERE id = (?)", [user_id]);
-  
+
     if (!user) {
       throw new AppError("Usuário não encontrado");
     }
@@ -47,7 +47,6 @@ class UsersController {
     if (password && !old_password) {
       throw new AppError(
         "Você precisa informar a senha antiga para definir a nova senha.",
-       
       );
     }
 
