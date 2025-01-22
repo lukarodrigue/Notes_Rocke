@@ -29,16 +29,12 @@ app.use((err, request, response, next) => {
 
   console.error(err);
 
-<<<<<<< HEAD
   return response.status(500).json({
     status: "error",
     message: "Internal server error",
   });
 });
-=======
-    console.log(request, error)
->>>>>>> 034614910870b671bed44fcfc5e68348ebeeeb56
 
 
-const PORT = 3000;
+const PORT = 3333;
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));
